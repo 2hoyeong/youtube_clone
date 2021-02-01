@@ -6,13 +6,14 @@ import me.hoyoung.youtube.domain.user.User;
 
 @Getter
 @NoArgsConstructor
-public class UserSignInDto {
+public class UserSignUpDto {
     private String id;
+    private String name;
     private String password;
 
-    public UserSignInDto (User entity) {
+    public UserSignUpDto (User entity) {
         this.id = entity.getId();
+        this.name = entity.getName();
         this.password = entity.getPassword();
     }
-
 }
