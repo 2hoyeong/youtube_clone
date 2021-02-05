@@ -30,18 +30,23 @@ public class VideoDrive {
             dir.mkdirs();
         }
 
-        String location = new StringBuilder(directory).append(File.separator).append(fileName).toString();
+        String location = this.getLocation() + fileName;
         Path path = Paths.get(location);
         Files.write(path, file.getBytes());
         return location;
     }
 
-    public byte[] getFile(String path) throws IOException {
-        File file = new File(path);
+    public byte[] getFile(String originName) throws IOException {
+        String location = this.getLocation() + originName;
+        File file = new File(location);
         byte[] b = null;
         if (file.exists()) {
             b = Files.readAllBytes(file.toPath());
         }
         return b;
+    }
+
+    public String getLocation() {
+        return new StringBuilder(directory).append(File.separator).toString();
     }
 }
