@@ -30,4 +30,12 @@ public class VideoService {
         return videoRepository.save(video);
     }
 
+    public Video findById(String id) {
+        return videoRepository.findById(id);
+    }
+
+    public byte[] getFile(String originName) throws IOException {
+        return videoDrive.getFile(originName);
+    }
+
 }
