@@ -1,9 +1,11 @@
 package me.hoyoung.youtube.service;
 
 import lombok.RequiredArgsConstructor;
+import me.hoyoung.youtube.domain.user.User;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.domain.video.VideoDrive;
 import me.hoyoung.youtube.domain.video.VideoRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +22,10 @@ public class VideoService {
     public Video createFile(MultipartFile file) throws IOException {
         String filename = videoDrive.createFile(file);
 
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Video video = Video.builder()
-                .originalFileName(file.getName())
+                .uploader(user)
                 .createdDate(Timestamp.valueOf(LocalDateTime.now()))
                 .originalFileName(filename)
                 .build();
