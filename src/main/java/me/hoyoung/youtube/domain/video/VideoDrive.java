@@ -35,13 +35,8 @@ public class VideoDrive {
         return fileName;
     }
 
-    public byte[] getFile(String originName) throws IOException {
+    public File getFile(String originName) throws IOException {
         String location = directory + originName;
-        File file = new File(location);
-        byte[] b = null;
-        if (file.exists()) {
-            b = Files.readAllBytes(file.toPath());
-        }
-        return b;
+        return new File(location);
     }
 }
