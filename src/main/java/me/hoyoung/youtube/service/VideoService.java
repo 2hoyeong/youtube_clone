@@ -7,8 +7,10 @@ import me.hoyoung.youtube.domain.video.VideoDrive;
 import me.hoyoung.youtube.domain.video.VideoRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final VideoDrive videoDrive;
 
+    @Transactional
     public Video createFile(MultipartFile file) throws IOException {
         String filename = videoDrive.createFile(file);
 
@@ -38,8 +41,7 @@ public class VideoService {
         return videoRepository.findById(id);
     }
 
-    public byte[] getFile(String originName) throws IOException {
+    public File getFile(String originName) throws IOException {
         return videoDrive.getFile(originName);
     }
-
 }
