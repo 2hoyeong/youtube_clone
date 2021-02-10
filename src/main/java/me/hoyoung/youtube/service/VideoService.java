@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.security.sasl.AuthenticationException;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -43,5 +44,16 @@ public class VideoService {
 
     public File getFile(String originName) throws IOException {
         return videoDrive.getFile(originName);
+    }
+
+    @Transactional
+    public void delete(Video video) throws IOException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (video.getUploader() == user) {
+            videoDrive.delete(video.getOriginalFileName());
+            videoRepository.delete(video);
+        } else {
+            throw new AuthenticationException("삭제할 수 없습니다.");
+        }
     }
 }
