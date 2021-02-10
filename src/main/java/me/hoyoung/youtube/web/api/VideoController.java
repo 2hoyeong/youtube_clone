@@ -57,4 +57,10 @@ public class VideoController {
             }
         }
     }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteVideo(@PathVariable("id") String id) throws IOException {
+        Video video = videoService.findById(id);
+        videoService.delete(video);
+    }
 }
