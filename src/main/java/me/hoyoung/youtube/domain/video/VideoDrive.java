@@ -14,11 +14,12 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
-public class VideoDrive {
+public class VideoDrive implements Drive {
 
     @Value("${video.storage.dir}")
     private String directory;
 
+    @Override
     public String createFile(MultipartFile file) throws IOException{
         String fileName = String.format(
                 "%s.%s",
@@ -36,11 +37,13 @@ public class VideoDrive {
         return fileName;
     }
 
+    @Override
     public File getFile(String originName) throws IOException {
         String location = directory + originName;
         return new File(location);
     }
 
+    @Override
     public void delete(String filename) throws IOException {
         File file = new File(directory + filename);
         if (file.exists()) {
