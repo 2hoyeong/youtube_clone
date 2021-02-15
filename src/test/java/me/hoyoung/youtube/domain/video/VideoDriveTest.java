@@ -50,7 +50,7 @@ public class VideoDriveTest {
 
     @Test
     @DisplayName("비디오 createFile 테스트")
-    public void userSignUpTest() throws Exception {
+    public void createFileTest() throws Exception {
         //given
         String filename = UUID.randomUUID().toString() + testExtension;
         byte[] contents = "Test contents".getBytes();
