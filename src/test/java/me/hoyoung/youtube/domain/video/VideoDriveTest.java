@@ -65,4 +65,12 @@ public class VideoDriveTest {
         File createFile = new File(directory + createdFileName);
         assertThat(createFile.exists()).isTrue();
     }
+    public MultipartFile createTestRandomFile(String contents) throws Exception {
+        String filename = UUID.randomUUID().toString() + testExtension;
+        byte[] contentBytes = contents.getBytes();
+        Path path = Paths.get(directory + filename);
+        Files.write(path, contentBytes);
+        return new MockMultipartFile(filename, filename, "text/plain",  new FileInputStream(new File(directory + filename)));
+    }
+
 }
