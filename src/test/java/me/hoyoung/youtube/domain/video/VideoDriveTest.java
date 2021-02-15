@@ -53,11 +53,7 @@ public class VideoDriveTest {
     @DisplayName("비디오 createFile 테스트")
     public void createFileTest() throws Exception {
         //given
-        String filename = UUID.randomUUID().toString() + testExtension;
-        byte[] contents = "Test contents".getBytes();
-        Path path = Paths.get(directory + filename);
-        Files.write(path, contents);
-        MultipartFile multipartFile = new MockMultipartFile(filename, filename, "text/plain",  new FileInputStream(new File(directory + filename)));
+        MultipartFile multipartFile = createTestRandomFile("Test contents");
 
         //when
         String createdFileName = videoDrive.createFile(multipartFile);
