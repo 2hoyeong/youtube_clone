@@ -22,6 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/v1/user/signin",
             "/api/v1/user/signup",
             "/h2-console/**",
+            "/api/v1/video/view/**"
     };
 
     @Override

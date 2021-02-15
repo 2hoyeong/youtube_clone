@@ -73,8 +73,12 @@ public class JwtTokenProvider {
     }
 
     public Boolean validateToken(String token) {
-        final String id = getIdFromToken(token);
-        return (userService.checkUserExistById(id) && !isTokenExpired(token));
+        try {
+            final String id = getIdFromToken(token);
+            return (userService.checkUserExistById(id) && !isTokenExpired(token));
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     public String resolveToken(HttpServletRequest request) {

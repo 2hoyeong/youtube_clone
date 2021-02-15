@@ -3,6 +3,7 @@ package me.hoyoung.youtube.domain.user;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.hoyoung.youtube.domain.video.Video;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -31,6 +33,9 @@ public class User implements UserDetails {
 
     @Column
     private String role = Role.USER.getKey();
+
+    @OneToMany(mappedBy = "uploader")
+    private List<Video> videos = new ArrayList<>();
 
     @Builder
     public User(String id, String name, String password) {
