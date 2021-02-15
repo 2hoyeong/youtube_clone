@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -65,6 +66,23 @@ public class VideoDriveTest {
         File createFile = new File(directory + createdFileName);
         assertThat(createFile.exists()).isTrue();
     }
+
+    @Test
+    @DisplayName("비디오 getFile 테스트")
+    public void getFileTest() throws Exception {
+        //given
+        String contents = UUID.randomUUID().toString() + "TestTestTestTestTestTest";
+        MultipartFile multipartFile =  createTestRandomFile(contents);
+        String createdFileName = videoDrive.createFile(multipartFile);
+
+        //when
+        File getFile = videoDrive.getFile(createdFileName);
+
+        //then
+        String readContents = com.google.common.io.Files.asCharSource(getFile, StandardCharsets.UTF_8).read();
+        assertThat(readContents).isEqualTo(contents);
+    }
+
     public MultipartFile createTestRandomFile(String contents) throws Exception {
         String filename = UUID.randomUUID().toString() + testExtension;
         byte[] contentBytes = contents.getBytes();
