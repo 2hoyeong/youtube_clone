@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -18,6 +17,7 @@ import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +32,8 @@ public class VideoDriveTest {
     @Value("${video.storage.dir}")
     private String directory;
 
+    private String testExtension = ".tests";
+
     @BeforeEach
     public void createDir() {
         File dir = new File(directory);
@@ -40,11 +42,17 @@ public class VideoDriveTest {
         }
     }
 
+    @AfterEach
+    public void cleanUp() {
+        final File[] files = new File(directory).listFiles((dir, name) -> name.matches( ".+("+ testExtension +")$" ));
+        Arrays.stream(files).forEach((file) -> file.delete());
+    }
+
     @Test
     @DisplayName("비디오 createFile 테스트")
     public void userSignUpTest() throws Exception {
         //given
-        String filename = UUID.randomUUID().toString() + ".tests";
+        String filename = UUID.randomUUID().toString() + testExtension;
         byte[] contents = "Test contents".getBytes();
         Path path = Paths.get(directory + filename);
         Files.write(path, contents);
