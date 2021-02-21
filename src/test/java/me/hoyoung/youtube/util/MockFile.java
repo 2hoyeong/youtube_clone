@@ -41,8 +41,7 @@ public class MockFile {
     }
 
     public void cleanUp() {
-        System.out.println("청소 시작");
-        final File[] files = new File(directory).listFiles((dir, name) -> name.matches( ".+("+ testExtension +")$" ));
+        final File[] files = new File(directory).listFiles((dir, name) -> name.matches( ".+("+ testExtension +"|null)$" ));
         Arrays.stream(files).forEach((file) -> file.delete());
     }
 
