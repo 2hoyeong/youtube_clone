@@ -48,7 +48,7 @@ public class VideoRepositoryTest {
     @Test
     @Transactional
     @DisplayName("비디오 save 테스트")
-    public void userSignUpTest() throws Exception {
+    public void saveVideoTest() throws Exception {
         //given
         String originFileName = "oiiowjoiwjakl.mp4";
         String thumbnailPath = "zxcvjioipasd.png";
