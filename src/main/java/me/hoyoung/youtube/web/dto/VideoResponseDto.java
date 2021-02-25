@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import me.hoyoung.youtube.domain.user.User;
 
 import java.sql.Timestamp;
 
@@ -14,7 +13,7 @@ import java.sql.Timestamp;
 @Getter
 public class VideoResponseDto {
     private String id;
-    private User uploader;
+    private String uploader;
     private String thumbnailPath;
     private Timestamp createdDate;
 }
