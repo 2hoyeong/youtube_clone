@@ -68,7 +68,7 @@ public class VideoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VideoResponseDto> getVideoInfo(@PathVariable("id") String id) throws IOException {
+    public ResponseEntity<VideoResponseDto> getVideoInfo(@PathVariable("id") String id) {
         Video video = videoService.findById(id);
         return new ResponseEntity<>(VideoResponseDto.builder()
                 .id(video.getId())
