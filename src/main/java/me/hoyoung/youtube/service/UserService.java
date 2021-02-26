@@ -3,12 +3,16 @@ package me.hoyoung.youtube.service;
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.user.User;
 import me.hoyoung.youtube.domain.user.UserRepository;
+import me.hoyoung.youtube.domain.video.Video;
+import me.hoyoung.youtube.domain.video.VideoRepository;
 import me.hoyoung.youtube.web.dto.UserSignInDto;
 import me.hoyoung.youtube.web.dto.UserSignUpDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -49,5 +53,11 @@ public class UserService {
     public UserDetails loadUserById(String id) throws UsernameNotFoundException {
         UserDetails userDetails = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         return userDetails;
+    }
+
+    @Transactional
+    public List<Video> findVideoList(String id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        return userRepository.findVideos(user.getId());
     }
 }
