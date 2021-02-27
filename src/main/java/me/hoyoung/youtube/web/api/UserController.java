@@ -3,12 +3,12 @@ package me.hoyoung.youtube.web.api;
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.config.auth.JwtTokenProvider;
 import me.hoyoung.youtube.domain.user.User;
+import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.service.UserService;
 import me.hoyoung.youtube.web.dto.UserSignInDto;
 import me.hoyoung.youtube.web.dto.UserTokenResponse;
 import me.hoyoung.youtube.web.dto.UserSignUpDto;
-import me.hoyoung.youtube.web.dto.VideoResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +36,8 @@ public class UserController {
 
 
     @GetMapping("/api/v1/user/{userId}/videoList")
-    public ResponseEntity<List<Video>> getVideoListByUserId(@PathVariable("userId") String id) throws IOException {
-        List<Video> videoList = userService.findVideoList(id);
+    public ResponseEntity<List<VideoListResponse>> getVideoListByUserId(@PathVariable("userId") String id) throws IOException {
+        List<VideoListResponse> videoList = userService.findVideoList(id);
         return new ResponseEntity<>(videoList, HttpStatus.OK);
     }
 }

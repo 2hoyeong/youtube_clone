@@ -3,8 +3,7 @@ package me.hoyoung.youtube.service;
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.user.User;
 import me.hoyoung.youtube.domain.user.UserRepository;
-import me.hoyoung.youtube.domain.video.Video;
-import me.hoyoung.youtube.domain.video.VideoRepository;
+import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.web.dto.UserSignInDto;
 import me.hoyoung.youtube.web.dto.UserSignUpDto;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -56,8 +55,9 @@ public class UserService {
     }
 
     @Transactional
-    public List<Video> findVideoList(String id) {
+    public List<VideoListResponse> findVideoList(String id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-        return userRepository.findVideos(user.getId());
+        List<VideoListResponse> vlist = userRepository.findVideos(user.getUuid());
+        return vlist;
     }
 }
