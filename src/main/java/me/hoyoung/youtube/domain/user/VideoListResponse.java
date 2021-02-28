@@ -4,6 +4,6 @@ import java.sql.Timestamp;
 
 public interface VideoListResponse {
     String getId();
-    String getThumbnilPath();
+    String getThumbnailPath();
     Timestamp getCreatedDate();
 }
