@@ -3,6 +3,8 @@ package me.hoyoung.youtube.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.hoyoung.youtube.domain.user.User;
 import me.hoyoung.youtube.domain.user.UserRepository;
+import me.hoyoung.youtube.domain.video.Video;
+import me.hoyoung.youtube.domain.video.VideoRepository;
 import me.hoyoung.youtube.web.dto.UserSignInDto;
 import me.hoyoung.youtube.web.dto.UserSignUpDto;
 import org.junit.jupiter.api.*;
@@ -13,10 +15,15 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.sql.Timestamp;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,6 +35,9 @@ public class UserControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private VideoRepository videoRepository;
 
     @Autowired
     private WebApplicationContext context;
@@ -43,6 +53,7 @@ public class UserControllerTest {
 
     @AfterEach
     public void tearDown() throws Exception {
+        videoRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -78,5 +89,32 @@ public class UserControllerTest {
         .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(new ObjectMapper().writeValueAsString(dto)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("유저 비디오 리스트 API 테스트")
+    public void getUserVideoListTest() throws Exception {
+        User user = User.builder().id(id).password(password).name("username").build();
+        String originFileName = "originFileName.txt";
+        String thumbnailPath = "thumbnail.png";
+        Timestamp createDate = new Timestamp(System.currentTimeMillis());
+
+        userRepository.save(user);
+        videoRepository.save(Video.builder()
+                .uploader(user)
+                .originalFileName(originFileName)
+                .thumbnailPath(thumbnailPath)
+                .createdDate(createDate)
+        .build());
+
+        ResultActions actions = mvc.perform(get("/api/v1/user/"+ user.getId() +"/videoList")
+                .contentType(MediaType.APPLICATION_JSON_VALUE));
+
+        Video video = videoRepository.findAll().get(0);
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(video.getId()))
+                .andExpect(jsonPath("$[0].thumbnailPath").value(video.getThumbnailPath()));
     }
 }
