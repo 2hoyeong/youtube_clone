@@ -67,6 +67,7 @@ public class VideoControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
+    @DisplayName("비디오 저장 API 테스트")
     public void videoSaveApiTest() throws Exception {
         MultipartFile mockVideo = mockFile.createRandomFile("videoSaveAPI TEST");
 
@@ -78,6 +79,7 @@ public class VideoControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
+    @DisplayName("비디오 스트림 API 테스트")
     public void videoStreamTest() throws Exception {
         String innerText = "videoStreamAPI TEST";
         MultipartFile mockVideo = mockFile.createRandomFile(innerText);
