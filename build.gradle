@@ -45,5 +45,8 @@ dependencies {
 
     //guava
     implementation("com.google.guava:guava:30.1-jre")
+
+    //ffmpeg
+    implementation("net.bramp.ffmpeg:ffmpeg:0.6.2")
 }
 
