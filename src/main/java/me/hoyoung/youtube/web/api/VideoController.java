@@ -3,7 +3,10 @@ package me.hoyoung.youtube.web.api;
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.service.VideoService;
+import me.hoyoung.youtube.web.dto.VideoResponseDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -62,5 +65,16 @@ public class VideoController {
     public void deleteVideo(@PathVariable("id") String id) throws IOException {
         Video video = videoService.findById(id);
         videoService.delete(video);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<VideoResponseDto> getVideoInfo(@PathVariable("id") String id) {
+        Video video = videoService.findById(id);
+        return new ResponseEntity<>(VideoResponseDto.builder()
+                .id(video.getId())
+                .uploader(video.getUploader().getName())
+                .thumbnailPath(video.getThumbnailPath())
+                .createdDate(video.getCreatedDate())
+        .build(), HttpStatus.OK);
     }
 }
