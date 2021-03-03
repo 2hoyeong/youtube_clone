@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,10 +27,12 @@ public class VideoController {
             consumes = {
                     MediaType.MULTIPART_FORM_DATA_VALUE,
                     MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public void createVideo(
+    public ResponseEntity<Map<String, String>> createVideo(
             @RequestPart("content") MultipartFile file) throws IOException {
-        String contentType = file.getContentType();
         Video metaData = videoService.createFile(file);
+        Map<String, String> response = new HashMap();
+        response.put("videoId", metaData.getId());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/view/{id}", produces = "video/mp4")
