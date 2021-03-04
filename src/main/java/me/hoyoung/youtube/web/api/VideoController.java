@@ -1,6 +1,7 @@
 package me.hoyoung.youtube.web.api;
 
 import lombok.RequiredArgsConstructor;
+import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.service.VideoService;
 import me.hoyoung.youtube.web.dto.VideoResponseDto;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -21,6 +23,8 @@ import java.util.Map;
 public class VideoController {
 
     private final VideoService videoService;
+
+    private final int RANDOM_VIDEO_ACCESS_SIZE = 10;
 
     @PostMapping(
             value = "/upload",
@@ -81,4 +85,10 @@ public class VideoController {
                 .createdDate(video.getCreatedDate())
         .build(), HttpStatus.OK);
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<VideoListResponse>> getVideoRandomList() {
+        return new ResponseEntity<>(videoService.getRandomVideos(RANDOM_VIDEO_ACCESS_SIZE), HttpStatus.OK);
+    }
+
 }
