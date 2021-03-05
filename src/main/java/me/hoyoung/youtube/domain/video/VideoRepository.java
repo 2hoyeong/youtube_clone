@@ -12,6 +12,6 @@ import java.util.List;
 public interface VideoRepository extends JpaRepository<Video, Long> {
     Video findById(String id);
 
-    @Query("SELECT id as id, thumbnailPath as thumbnailPath, createdDate as createdDate FROM Video ORDER BY RAND()")
+    @Query("SELECT id as id, thumbnailPath as thumbnailPath, createdDate as createdDate, title as title FROM Video ORDER BY RAND()")
     List<VideoListResponse> findRandomVideo(Pageable pageable);
 }

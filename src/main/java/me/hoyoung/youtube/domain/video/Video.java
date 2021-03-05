@@ -33,12 +33,20 @@ public class Video {
     @Column(name="created_date", nullable = false)
     private Timestamp createdDate;
 
+    @Column(nullable = false)
+    private String title;
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Builder
-    public Video(User uploader, String originalFileName, String thumbnailPath, Timestamp createdDate) {
+    public Video(User uploader, String originalFileName, String thumbnailPath, Timestamp createdDate, String title) {
         this.uploader = uploader;
         this.originalFileName = originalFileName;
         this.thumbnailPath = thumbnailPath;
         this.createdDate = createdDate;
+        this.title = title;
     }
 
 }
