@@ -64,4 +64,10 @@ public class VideoService {
     public List<VideoListResponse> getRandomVideos(int size) {
         return videoRepository.findRandomVideo(PageRequest.of(0, size));
     }
+
+    @Transactional
+    public void setVideoTitle(String id, String title) {
+        Video video = videoRepository.findById(id);
+        video.setTitle(title);
+    }
 }
