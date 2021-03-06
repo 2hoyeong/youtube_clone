@@ -1,10 +1,12 @@
 package me.hoyoung.youtube.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.hoyoung.youtube.domain.user.User;
 import me.hoyoung.youtube.domain.user.UserRepository;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.domain.video.VideoRepository;
 import me.hoyoung.youtube.util.MockFile;
+import me.hoyoung.youtube.web.dto.VideoTitleModifyDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,10 +25,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -119,5 +124,33 @@ public class VideoControllerTest {
                 .andExpect(jsonPath("id").value(video.getId()))
                 .andExpect(jsonPath("thumbnailPath").value(video.getThumbnailPath()))
                 .andExpect(jsonPath("uploader").value(video.getUploader().getName()));
+    }
+
+    @Test
+    @DisplayName("비디오 타이틀 수정 테스트")
+    public void setVideoTitleTest() throws Exception {
+        String videoTitle = "비디오 타이틀";
+        videoRepository.save(Video.builder()
+        .createdDate(new Timestamp(System.currentTimeMillis()))
+        .originalFileName("originFileName")
+        .uploader((User) userDetails)
+        .build());
+
+        Video video = videoRepository.findAll().get(0);
+        String videoId = video.getId();
+        assertThat(video.getTitle()).isEqualTo(null);
+
+        VideoTitleModifyDto videoTitleVo = new VideoTitleModifyDto(videoId, videoTitle);
+
+        mvc.perform(patch("/api/v1/video/title")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .characterEncoding("utf-8")
+                .content(new ObjectMapper().writeValueAsString(videoTitleVo))
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
+
+        video = videoRepository.findAll().get(0);
+
+        assertThat(video.getTitle()).isEqualTo(videoTitle);
     }
 }
