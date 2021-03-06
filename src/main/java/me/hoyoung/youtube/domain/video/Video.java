@@ -33,7 +33,7 @@ public class Video {
     @Column(name="created_date", nullable = false)
     private Timestamp createdDate;
 
-    @Column(nullable = false)
+    @Column
     private String title;
 
     public void setTitle(String title) {
