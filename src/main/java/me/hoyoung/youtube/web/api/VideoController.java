@@ -5,6 +5,7 @@ import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.service.VideoService;
 import me.hoyoung.youtube.web.dto.VideoResponseDto;
+import me.hoyoung.youtube.web.dto.VideoTitleModifyDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -91,4 +92,8 @@ public class VideoController {
         return new ResponseEntity<>(videoService.getRandomVideos(RANDOM_VIDEO_ACCESS_SIZE), HttpStatus.OK);
     }
 
+    @PatchMapping("/title")
+    public void setVideoTitle(@RequestBody VideoTitleModifyDto dto) {
+        videoService.setVideoTitle(dto.getId(), dto.getTitle());
+    }
 }
