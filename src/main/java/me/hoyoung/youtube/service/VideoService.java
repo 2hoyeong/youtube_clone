@@ -2,9 +2,11 @@ package me.hoyoung.youtube.service;
 
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.user.User;
+import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.domain.video.Drive;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.domain.video.VideoRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -55,5 +58,16 @@ public class VideoService {
         } else {
             throw new AuthenticationException("삭제할 수 없습니다.");
         }
+    }
+
+    @Transactional
+    public List<VideoListResponse> getRandomVideos(int size) {
+        return videoRepository.findRandomVideo(PageRequest.of(0, size));
+    }
+
+    @Transactional
+    public void setVideoTitle(String id, String title) {
+        Video video = videoRepository.findById(id);
+        video.setTitle(title);
     }
 }

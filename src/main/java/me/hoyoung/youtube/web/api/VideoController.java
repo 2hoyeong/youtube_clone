@@ -1,9 +1,11 @@
 package me.hoyoung.youtube.web.api;
 
 import lombok.RequiredArgsConstructor;
+import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.service.VideoService;
 import me.hoyoung.youtube.web.dto.VideoResponseDto;
+import me.hoyoung.youtube.web.dto.VideoTitleModifyDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,15 +25,19 @@ public class VideoController {
 
     private final VideoService videoService;
 
+    private final int RANDOM_VIDEO_ACCESS_SIZE = 10;
+
     @PostMapping(
             value = "/upload",
             consumes = {
                     MediaType.MULTIPART_FORM_DATA_VALUE,
                     MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public void createVideo(
+    public ResponseEntity<Map<String, String>> createVideo(
             @RequestPart("content") MultipartFile file) throws IOException {
-        String contentType = file.getContentType();
         Video metaData = videoService.createFile(file);
+        Map<String, String> response = new HashMap();
+        response.put("videoId", metaData.getId());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/view/{id}", produces = "video/mp4")
@@ -76,5 +85,15 @@ public class VideoController {
                 .thumbnailPath(video.getThumbnailPath())
                 .createdDate(video.getCreatedDate())
         .build(), HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<VideoListResponse>> getVideoRandomList() {
+        return new ResponseEntity<>(videoService.getRandomVideos(RANDOM_VIDEO_ACCESS_SIZE), HttpStatus.OK);
+    }
+
+    @PatchMapping("/title")
+    public void setVideoTitle(@RequestBody VideoTitleModifyDto dto) {
+        videoService.setVideoTitle(dto.getId(), dto.getTitle());
     }
 }
