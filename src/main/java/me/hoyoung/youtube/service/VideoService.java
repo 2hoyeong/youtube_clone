@@ -6,6 +6,7 @@ import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.domain.video.Drive;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.domain.video.VideoRepository;
+import me.hoyoung.youtube.domain.video.VideoResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -69,5 +70,17 @@ public class VideoService {
     public void setVideoTitle(String id, String title) {
         Video video = videoRepository.findById(id);
         video.setTitle(title);
+    }
+
+    @Transactional
+    public VideoResponse getVideoWithUser(String id) {
+        VideoResponse video = videoRepository.findVideoInfo(id);
+        increaseViews(videoRepository.findById(id));
+        return video;
+    }
+
+    @Transactional
+    public void increaseViews(Video video) {
+        video.setViews(video.getViews() + 1);
     }
 }
