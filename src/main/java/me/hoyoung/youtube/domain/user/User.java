@@ -37,6 +37,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "uploader")
     private List<Video> videos = new ArrayList<>();
 
+    @Column
+    private String profileImage;
+
     @Builder
     public User(String id, String name, String password) {
         this.id = id;
