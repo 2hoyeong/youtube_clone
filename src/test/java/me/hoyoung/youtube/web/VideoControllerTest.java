@@ -123,7 +123,10 @@ public class VideoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(video.getId()))
                 .andExpect(jsonPath("thumbnailPath").value(video.getThumbnailPath()))
-                .andExpect(jsonPath("uploader").value(video.getUploader().getName()));
+                .andExpect(jsonPath("name").value(video.getUploader().getName()))
+                .andExpect(jsonPath("profileImage").value(video.getUploader().getProfileImage()))
+                .andExpect(jsonPath("views").value(video.getViews()))
+                .andExpect(jsonPath("title").value(video.getTitle()));
     }
 
     @Test
