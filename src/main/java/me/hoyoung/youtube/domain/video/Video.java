@@ -36,9 +36,14 @@ public class Video {
     @Column
     private String title;
 
+    @Column
+    private Long views = 0L;
+
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public void setViews(Long views) { this.views = views; }
 
     @Builder
     public Video(User uploader, String originalFileName, String thumbnailPath, Timestamp createdDate, String title) {
