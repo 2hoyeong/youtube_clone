@@ -37,6 +37,7 @@ dependencies {
 
     // db
     implementation('com.h2database:h2')
+    compile 'mysql:mysql-connector-java'
 
     // jwt
     compileOnly('io.jsonwebtoken:jjwt-api:0.11.2')
