@@ -3,6 +3,7 @@ package me.hoyoung.youtube.web.api;
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.domain.video.Video;
+import me.hoyoung.youtube.domain.video.VideoResponse;
 import me.hoyoung.youtube.service.VideoService;
 import me.hoyoung.youtube.web.dto.VideoResponseDto;
 import me.hoyoung.youtube.web.dto.VideoTitleModifyDto;
@@ -77,14 +78,9 @@ public class VideoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VideoResponseDto> getVideoInfo(@PathVariable("id") String id) {
-        Video video = videoService.findById(id);
-        return new ResponseEntity<>(VideoResponseDto.builder()
-                .id(video.getId())
-                .uploader(video.getUploader().getName())
-                .thumbnailPath(video.getThumbnailPath())
-                .createdDate(video.getCreatedDate())
-        .build(), HttpStatus.OK);
+    public ResponseEntity<VideoResponse> getVideoInfo(@PathVariable("id") String id) {
+        VideoResponse video = videoService.getVideoWithUser(id);
+        return new ResponseEntity<>(video, HttpStatus.OK);
     }
 
     @GetMapping("/list")
