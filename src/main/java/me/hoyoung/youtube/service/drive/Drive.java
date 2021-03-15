@@ -1,4 +1,4 @@
-package me.hoyoung.youtube.domain.video;
+package me.hoyoung.youtube.service.drive;
 
 import org.springframework.web.multipart.MultipartFile;
 

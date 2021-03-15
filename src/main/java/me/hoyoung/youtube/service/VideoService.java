@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.user.User;
 import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.domain.video.*;
+import me.hoyoung.youtube.service.drive.DiskDrive;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import java.util.List;
 @Service
 public class VideoService {
     private final VideoRepository videoRepository;
-    private final VideoDrive videoDrive;
+    private final DiskDrive videoDrive;
 
     @Transactional
     public Video createFile(MultipartFile file) throws IOException {

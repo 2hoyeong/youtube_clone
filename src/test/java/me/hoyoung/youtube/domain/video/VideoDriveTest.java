@@ -1,5 +1,6 @@
 package me.hoyoung.youtube.domain.video;
 
+import me.hoyoung.youtube.service.drive.DiskDrive;
 import me.hoyoung.youtube.util.MockFile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VideoDriveTest {
 
     @Autowired
-    private VideoDrive videoDrive;
+    private DiskDrive videoDrive;
 
     @Autowired
     private MockFile mockFile;

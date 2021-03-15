@@ -1,6 +1,8 @@
-package me.hoyoung.youtube.domain.video;
+package me.hoyoung.youtube.service.drive;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,14 +15,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Service
-public class VideoDrive implements Drive {
+public class DiskDrive implements Drive {
 
-    @Value("${video.storage.dir}")
     private String directory;
 
     @Override
-    public String createFile(MultipartFile file) throws IOException{
+    public String createFile(MultipartFile file) throws IOException {
         String fileName = String.format(
                 "%s.%s",
                 UUID.randomUUID().toString(),
