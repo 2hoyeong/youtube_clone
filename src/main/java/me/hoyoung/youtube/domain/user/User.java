@@ -40,6 +40,10 @@ public class User implements UserDetails {
     @Column
     private String profileImage;
 
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
     @Builder
     public User(String id, String name, String password) {
         this.id = id;
