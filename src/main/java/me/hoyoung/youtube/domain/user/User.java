@@ -18,6 +18,8 @@ import java.util.List;
 @Entity
 public class User implements UserDetails {
 
+    private final String DEFAULT_PROFILE_IMAGE_NAME = "default.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uuid;
@@ -38,7 +40,7 @@ public class User implements UserDetails {
     private List<Video> videos = new ArrayList<>();
 
     @Column
-    private String profileImage;
+    private String profileImage = DEFAULT_PROFILE_IMAGE_NAME;
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
