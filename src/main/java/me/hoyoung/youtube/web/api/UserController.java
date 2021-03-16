@@ -56,4 +56,18 @@ public class UserController {
         byte[] profileImageByteArray = Files.toByteArray(profileImageFile);
         return new ResponseEntity<>(profileImageByteArray, HttpStatus.OK);
     }
+
+    @GetMapping("/{userId}/profileImage")
+    public ResponseEntity<byte[]> getProfileImage(@PathVariable("userId") Long id) throws IOException {
+        File profileImageFile = userService.getProfileImageById(id);
+        byte[] profileImageByteArray = Files.toByteArray(profileImageFile);
+        return new ResponseEntity<>(profileImageByteArray, HttpStatus.OK);
+    }
+
+    @GetMapping("/profileImage/{filename}")
+    public ResponseEntity<byte[]> getProfileImage(@PathVariable("filename")String filename) throws IOException {
+        File profileImageFile = userService.getProfileImageByFileName(filename);
+        byte[] profileImageByteArray = Files.toByteArray(profileImageFile);
+        return new ResponseEntity<>(profileImageByteArray, HttpStatus.OK);
+    }
 }
