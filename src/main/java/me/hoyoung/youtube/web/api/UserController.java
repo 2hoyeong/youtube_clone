@@ -1,5 +1,6 @@
 package me.hoyoung.youtube.web.api;
 
+import com.google.common.io.Files;
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.config.auth.JwtTokenProvider;
 import me.hoyoung.youtube.domain.user.User;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -46,5 +48,12 @@ public class UserController {
     public void setProfileImage(@RequestPart("image") MultipartFile file) throws IOException {
         // TODO : 이미지 확장자 제한 추가
         userService.updateProfileImage(file);
+    }
+
+    @GetMapping("/profileImage")
+    public ResponseEntity<byte[]> getProfileImage() throws IOException {
+        File profileImageFile = userService.getProfileImage();
+        byte[] profileImageByteArray = Files.toByteArray(profileImageFile);
+        return new ResponseEntity<>(profileImageByteArray, HttpStatus.OK);
     }
 }
