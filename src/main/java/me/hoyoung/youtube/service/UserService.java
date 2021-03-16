@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -73,5 +74,12 @@ public class UserService {
         Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUuid();
         User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         user.setProfileImage(filename);
+    }
+
+    @Transactional
+    public File getProfileImage() throws IOException {
+        Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUuid();
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        return profileDrive.getFile(user.getProfileImage());
     }
 }
