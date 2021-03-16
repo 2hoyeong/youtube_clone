@@ -82,4 +82,14 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         return profileDrive.getFile(user.getProfileImage());
     }
+
+    @Transactional
+    public File getProfileImageById(Long id) throws IOException {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        return profileDrive.getFile(user.getProfileImage());
+    }
+
+    public File getProfileImageByFileName(String filename) throws IOException {
+        return profileDrive.getFile(filename);
+    }
 }
