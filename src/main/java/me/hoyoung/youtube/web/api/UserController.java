@@ -37,8 +37,14 @@ public class UserController {
 
 
     @GetMapping("/{userId}/videoList")
-    public ResponseEntity<List<VideoListResponse>> getVideoListByUserId(@PathVariable("userId") String id) throws IOException {
+    public ResponseEntity<List<VideoListResponse>> getVideoListByUserId(@PathVariable("userId") String id) {
         List<VideoListResponse> videoList = userService.findVideoList(id);
         return new ResponseEntity<>(videoList, HttpStatus.OK);
+    }
+
+    @PatchMapping("/profileImage")
+    public void setProfileImage(@RequestPart("image") MultipartFile file) throws IOException {
+        // TODO : 이미지 확장자 제한 추가
+        userService.updateProfileImage(file);
     }
 }
