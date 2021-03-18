@@ -1,6 +1,5 @@
-package me.hoyoung.youtube.domain.video;
+package me.hoyoung.youtube.service.drive;
 
-import me.hoyoung.youtube.service.drive.DiskDrive;
 import me.hoyoung.youtube.util.MockFile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class VideoDriveTest {
+public class DiskDriveTest {
 
     @Autowired
     private DiskDrive videoDrive;
@@ -33,7 +32,7 @@ public class VideoDriveTest {
     }
 
     @Test
-    @DisplayName("비디오 createFile 테스트")
+    @DisplayName("createFile 테스트")
     public void createFileTest() throws Exception {
         //given
         MultipartFile multipartFile = mockFile.createRandomFile("Test contents");
@@ -47,7 +46,7 @@ public class VideoDriveTest {
     }
 
     @Test
-    @DisplayName("비디오 getFile 테스트")
+    @DisplayName("getFile 테스트")
     public void getFileTest() throws Exception {
         //given
         String contents = UUID.randomUUID().toString() + "TestTestTestTestTestTest";
