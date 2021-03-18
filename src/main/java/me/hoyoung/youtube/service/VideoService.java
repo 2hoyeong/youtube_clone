@@ -23,6 +23,7 @@ import java.util.List;
 public class VideoService {
     private final VideoRepository videoRepository;
     private final DiskDrive videoDrive;
+    private final DiskDrive thumbnailDrive;
 
     @Transactional
     public Video createFile(MultipartFile file) throws IOException {
@@ -80,5 +81,10 @@ public class VideoService {
     @Transactional
     public void increaseViews(Video video) {
         video.setViews(video.getViews() + 1);
+    }
+
+    public File getThumbnailImage(String id) throws IOException {
+        Video video = videoRepository.findById(id);
+        return thumbnailDrive.getFile(video.getThumbnailPath());
     }
 }
