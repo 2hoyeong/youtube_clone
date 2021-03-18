@@ -11,10 +11,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -59,6 +60,24 @@ public class DiskDriveTest {
         //then
         String readContents = com.google.common.io.Files.asCharSource(getFile, StandardCharsets.UTF_8).read();
         assertThat(readContents).isEqualTo(contents);
+    }
+
+    @Test
+    @DisplayName("delete 테스트")
+    public void deleteFileTest() throws Exception {
+        //given
+        String contents = "FILE DELETE 테스트용 파일 내용";
+        MultipartFile multipartFile = mockFile.createRandomFile(contents);
+        String createdFileName = multipartFile.getOriginalFilename();
+
+        //when
+        assertThat(mockFile.findFile(createdFileName)).isFile();
+        videoDrive.delete(createdFileName);
+
+        //then
+        assertThatExceptionOfType(FileNotFoundException.class).isThrownBy(() -> {
+            videoDrive.delete(createdFileName);
+        });
     }
 
 }
