@@ -18,4 +18,10 @@ public class DiskConfiguration {
     public DiskDrive profileDrive(String profileDirectory) {
         return new DiskDrive(profileDirectory);
     }
+
+    @Bean
+    @Value("${thumbnail.storage.dir}")
+    public DiskDrive thumbnailDrive(String thumbnailDirectory) {
+        return new DiskDrive(thumbnailDirectory);
+    }
 }
