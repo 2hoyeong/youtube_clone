@@ -29,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/v1/video/*",
             "/api/v1/user/profileImage/**",
             "/api/v1/user/*/profileImage",
+            "/api/v1/video/*/thumbnail"
     };
 
     @Override
