@@ -7,4 +7,7 @@ public interface VideoListResponse {
     String getThumbnailPath();
     Timestamp getCreatedDate();
     String getTitle();
+    String getName();
+    String getProfileImage();
+    Long getViews();
 }
