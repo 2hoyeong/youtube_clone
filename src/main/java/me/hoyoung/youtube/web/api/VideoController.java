@@ -1,5 +1,6 @@
 package me.hoyoung.youtube.web.api;
 
+import com.google.common.io.Files;
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.user.VideoListResponse;
 import me.hoyoung.youtube.domain.video.Video;
@@ -91,5 +92,12 @@ public class VideoController {
     @PatchMapping("/title")
     public void setVideoTitle(@RequestBody VideoTitleModifyDto dto) {
         videoService.setVideoTitle(dto.getId(), dto.getTitle());
+    }
+
+    @GetMapping("/{videoId}/thumbnail")
+    public ResponseEntity<byte[]> getThumbnail(@PathVariable("videoId")String id) throws IOException {
+        File thumbnailFile = videoService.getThumbnailImage(id);
+        byte[] thumbnailImageByteArray = Files.toByteArray(thumbnailFile);
+        return new ResponseEntity<>(thumbnailImageByteArray, HttpStatus.OK);
     }
 }
