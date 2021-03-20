@@ -28,7 +28,7 @@ public class Video {
     private String originalFileName;
 
     @Column
-    private String thumbnailPath;
+    private String thumbnailPath = "default.png";
 
     @Column(name="created_date", nullable = false)
     private Timestamp createdDate;
