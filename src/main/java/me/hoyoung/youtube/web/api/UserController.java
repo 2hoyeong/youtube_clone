@@ -70,4 +70,8 @@ public class UserController {
         byte[] profileImageByteArray = Files.toByteArray(profileImageFile);
         return new ResponseEntity<>(profileImageByteArray, HttpStatus.OK);
     }
+
+    @GetMapping("")
+    public void isTokenValidate() {
+    }
 }
