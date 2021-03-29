@@ -1,6 +1,7 @@
 package me.hoyoung.youtube.web.api;
 
 import com.google.common.io.Files;
+import com.google.common.util.concurrent.RateLimiter;
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.config.auth.JwtTokenProvider;
 import me.hoyoung.youtube.domain.user.User;
@@ -25,6 +26,8 @@ public class UserController {
 
     private final UserService userService;
     private final JwtTokenProvider provider;
+
+    private RateLimiter limiter = RateLimiter.create(5.0);
 
     @PostMapping("/signin")
     public UserTokenResponse signIn(@RequestBody UserSignInDto requestDto) {
@@ -72,6 +75,10 @@ public class UserController {
     }
 
     @GetMapping("")
-    public void isTokenValidate() {
+    public ResponseEntity isTokenValidate() {
+        if(!limiter.tryAcquire()) {
+            return new ResponseEntity(HttpStatus.TOO_MANY_REQUESTS);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
