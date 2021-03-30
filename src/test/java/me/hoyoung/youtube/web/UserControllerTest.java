@@ -117,4 +117,17 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[0].id").value(video.getId()))
                 .andExpect(jsonPath("$[0].thumbnailPath").value(video.getThumbnailPath()));
     }
+
+    @Test
+    @DisplayName("토큰 검증 확인 API 제한 테스트")
+    public void tokenValidatorThrowsTooManyRequests() throws Exception {
+        for(int i = 0; i <= 5; i++) {
+            mvc.perform(get("/api/v1/user"))
+                    .andExpect(status().isOk());
+        }
+        mvc.perform(get("/api/v1/user"))
+                .andExpect(status().isTooManyRequests());
+
+    }
+
 }
