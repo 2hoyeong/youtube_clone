@@ -1,5 +1,6 @@
 package me.hoyoung.youtube.domain.comment;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.hoyoung.youtube.domain.user.User;
@@ -29,4 +30,12 @@ public class Comment {
     @ManyToOne
     @JoinColumn
     private Video video;
+
+    @Builder
+    public Comment(String content, Timestamp createdDate, User author, Video video) {
+        this.content = content;
+        this.createdDate = createdDate;
+        this.author = author;
+        this.video = video;
+    }
 }
