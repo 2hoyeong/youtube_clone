@@ -5,8 +5,6 @@ import me.hoyoung.youtube.service.CommentService;
 import me.hoyoung.youtube.web.dto.CommentAddDto;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/comment")
@@ -17,7 +15,7 @@ public class CommentController {
 
     @PostMapping(value = "/{videoId}")
     public void createVideo(
-            @RequestBody CommentAddDto commentAddDto, @PathVariable("videoId") String videoId) throws IOException {
+            @RequestBody CommentAddDto commentAddDto, @PathVariable("videoId") String videoId) {
         commentService.addComment(videoId, commentAddDto.getContent());
     }
 
