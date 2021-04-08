@@ -2,6 +2,7 @@ package me.hoyoung.youtube.service;
 
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.comment.Comment;
+import me.hoyoung.youtube.domain.comment.CommentListDao;
 import me.hoyoung.youtube.domain.comment.CommentRepository;
 import me.hoyoung.youtube.domain.user.User;
 import me.hoyoung.youtube.domain.video.Video;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -32,6 +34,13 @@ public class CommentService {
                 .build();
 
         commentRepository.save(comment);
+    }
+
+    @Transactional
+    public List<CommentListDao> getCommentList(String videoId) {
+        Video video = videoRepository.findById(videoId);
+        List<CommentListDao> commentList = commentRepository.findAllComment(video);
+        return commentList;
     }
 
 }
