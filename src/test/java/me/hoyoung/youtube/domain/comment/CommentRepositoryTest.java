@@ -6,13 +6,18 @@ import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.domain.video.VideoRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -61,4 +66,27 @@ public class CommentRepositoryTest {
                 .createdDate(timestamp).build();
         videoRepository.save(mockVideo);
     }
+
+    @Test
+    @Transactional
+    @DisplayName("Comment 저장 테스트")
+    public void saveCommentTest() {
+        //given
+        String commentContent = "댓글 테스트 내용";
+        commentRepository.save(Comment.builder()
+                .author(mockUser)
+                .video(mockVideo)
+                .createdDate(Timestamp.valueOf(LocalDateTime.now()))
+                .content(commentContent)
+                .build());
+
+        //when
+        Comment comment = commentRepository.findAll().get(0);
+
+        //then
+        assertThat(comment.getAuthor()).isEqualTo(mockUser);
+        assertThat(comment.getVideo()).isEqualTo(mockVideo);
+        assertThat(comment.getContent()).isEqualTo(commentContent);
+    }
+
 }
