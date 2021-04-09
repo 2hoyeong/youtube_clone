@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -89,4 +91,43 @@ public class CommentRepositoryTest {
         assertThat(comment.getContent()).isEqualTo(commentContent);
     }
 
+    @Test
+    @Transactional
+    @DisplayName("비디오의 Comment 조회 테스트")
+    public void findCommentByVideoIdTest() {
+        //given
+        String[] commentsContent = {
+                "댓글 테스트 내용1",
+                "댓글 테스트 내용2"
+        };
+        Arrays.stream(commentsContent).forEach(comment -> {
+            commentRepository.save(Comment.builder()
+                    .author(mockUser)
+                    .video(mockVideo)
+                    .createdDate(Timestamp.valueOf(LocalDateTime.now()))
+                    .content(comment)
+                    .build());
+        });
+        Video tempMockVideo = Video.builder()
+                .uploader(mockUser)
+                .originalFileName("qwioqoqewqeiwoqw.mp4")
+                .createdDate(Timestamp.valueOf(LocalDateTime.now())).build();
+        videoRepository.save(tempMockVideo);
+        commentRepository.save(Comment.builder()
+                .author(mockUser)
+                .video(tempMockVideo)
+                .createdDate(Timestamp.valueOf(LocalDateTime.now()))
+                .content("조회되면 안되는 댓글")
+                .build());
+
+        //when
+        List<CommentListDao> commentList = commentRepository.findAllComment(mockVideo);
+
+        //then
+        assertThat(commentsContent.length).isEqualTo(commentList.size());
+        for (int i = 0; i < commentList.size(); i++) {
+            assertThat(commentList.get(i).getContent()).isEqualTo(commentsContent[i]);
+            assertThat(commentList.get(i).getName()).isEqualTo(mockUser.getName());
+        }
+    }
 }
