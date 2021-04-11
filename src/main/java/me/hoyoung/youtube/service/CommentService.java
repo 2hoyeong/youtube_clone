@@ -43,4 +43,10 @@ public class CommentService {
         return commentList;
     }
 
+    @Transactional
+    public Long deleteComment(Long CommentId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return commentRepository.deleteByUserAndId(user, CommentId);
+    }
+
 }
