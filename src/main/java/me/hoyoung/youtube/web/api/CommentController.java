@@ -20,7 +20,7 @@ public class CommentController {
 
 
     @PostMapping(value = "/{videoId}")
-    public void createVideo(
+    public void createVideoComment(
             @RequestBody CommentAddDto commentAddDto, @PathVariable("videoId") String videoId) {
         commentService.addComment(videoId, commentAddDto.getContent());
     }
