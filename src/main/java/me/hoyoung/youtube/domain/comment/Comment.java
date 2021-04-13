@@ -31,6 +31,10 @@ public class Comment {
     @JoinColumn
     private Video video;
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Builder
     public Comment(String content, Timestamp createdDate, User author, Video video) {
         this.content = content;

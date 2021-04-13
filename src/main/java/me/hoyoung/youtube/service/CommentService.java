@@ -1,5 +1,6 @@
 package me.hoyoung.youtube.service;
 
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.comment.Comment;
 import me.hoyoung.youtube.domain.comment.CommentListDao;
@@ -47,6 +48,16 @@ public class CommentService {
     public Long deleteComment(Long commentId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return commentRepository.deleteByAuthorAndCuid(user, commentId);
+    }
+
+    @Transactional
+    public void patchComment(Long commentId, String content) throws NotFoundException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Comment comment = commentRepository.findByAuthorAndCuid(user, commentId);
+        if (comment == null) {
+            throw new NotFoundException("수정할 댓글을 찾을 수 없습니다.");
+        }
+        comment.setContent(content);
     }
 
 }
