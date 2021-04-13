@@ -8,6 +8,7 @@ import me.hoyoung.youtube.domain.user.UserRepository;
 import me.hoyoung.youtube.domain.video.Video;
 import me.hoyoung.youtube.domain.video.VideoRepository;
 import me.hoyoung.youtube.web.dto.CommentAddDto;
+import me.hoyoung.youtube.web.dto.CommentPatchDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -159,5 +160,32 @@ public class CommentControllerTest {
         List<Comment> commentList = commentRepository.findAll();
 
         assertThat(commentList.size()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("댓글 수정 API 테스트")
+    public void patchCommentTest() throws Exception {
+        String contents = "댓글 수정 API 테스트";
+        String patchedContents = "댓글 수정 후 내용 " + UUID.randomUUID();
+
+        commentRepository.save(Comment.builder()
+                .author((User) userDetails)
+                .video(mockVideo)
+                .createdDate(Timestamp.valueOf(LocalDateTime.now()))
+                .content(contents)
+                .build());
+        Comment comment = commentRepository.findAll().get(0);
+        assertThat(comment.getContent()).isEqualTo(contents);
+
+        CommentPatchDto dto = new CommentPatchDto(patchedContents);
+
+        mvc.perform(patch("/api/v1/comment/" + comment.getCuid())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(new ObjectMapper().writeValueAsString(dto))
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
+
+        Comment patchedComment = commentRepository.findAll().get(0);
+        assertThat(patchedComment.getContent()).isEqualTo(patchedContents);
     }
 }
