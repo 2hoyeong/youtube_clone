@@ -20,16 +20,20 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -110,5 +114,26 @@ public class CommentControllerTest {
 
         Comment comment = commentRepository.findAll().get(0);
         assertThat(comment.getContent()).isEqualTo(contents);
+    }
+
+
+    @Test
+    @DisplayName("댓글 조회 API 테스트")
+    public void getVideoCommentsTest() throws Exception {
+        String contents = "댓글 조회 API 테스트 댓글 내용" + UUID.randomUUID();
+        String videoId = mockVideo.getId();
+        commentRepository.save(Comment.builder()
+                .author((User) userDetails)
+                .video(mockVideo)
+                .createdDate(Timestamp.valueOf(LocalDateTime.now()))
+                .content(contents)
+                .build());
+
+        ResultActions actions = mvc.perform(get("/api/v1/comment/list/" + videoId)
+                .contentType(MediaType.APPLICATION_JSON_VALUE));
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].content").value(contents));
     }
 }
