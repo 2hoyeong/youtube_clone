@@ -14,5 +14,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<CommentListDao> findAllComment(@Param("video") Video video);
 
     Long deleteByAuthorAndCuid(User author, Long cuid);
+
+    Comment findByAuthorAndCuid(User author, Long cuid);
 }
 
