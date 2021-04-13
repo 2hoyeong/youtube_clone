@@ -130,4 +130,37 @@ public class CommentRepositoryTest {
             assertThat(commentList.get(i).getName()).isEqualTo(mockUser.getName());
         }
     }
+
+    @Test
+    @Transactional
+    @DisplayName("Comment 삭제 테스트")
+    public void deleteCommentTest() {
+        //given
+        String[] commentsContent = {
+                "댓글 테스트 내용1",
+                "댓글 테스트 내용2",
+                "댓글 테스트 내용3",
+                "댓글 테스트 내용4",
+                "댓글 테스트 내용5",
+                "댓글 테스트 내용6",
+
+        };
+        Arrays.stream(commentsContent).forEach(comment -> {
+            commentRepository.save(Comment.builder()
+                    .author(mockUser)
+                    .video(mockVideo)
+                    .createdDate(Timestamp.valueOf(LocalDateTime.now()))
+                    .content(comment)
+                    .build());
+        });
+        List<CommentListDao> commentList = commentRepository.findAllComment(mockVideo);
+
+        //when
+        commentList.stream().forEach(comment -> {
+            commentRepository.deleteByAuthorAndCuid(mockUser, comment.getCuid());
+        });
+
+        //then
+        assertThat(commentRepository.findAllComment(mockVideo).size()).isEqualTo(0);
+    }
 }
