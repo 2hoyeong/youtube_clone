@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.hoyoung.youtube.domain.comment.CommentListDao;
 import me.hoyoung.youtube.service.CommentService;
 import me.hoyoung.youtube.web.dto.CommentAddDto;
+import me.hoyoung.youtube.web.dto.CommentPatchDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +34,10 @@ public class CommentController {
     @DeleteMapping(value = "/{commentId}")
     public void deleteComment(@PathVariable("commentId") Long commentId) {
         commentService.deleteComment(commentId);
+    }
+
+    @PatchMapping(value = "/{commentId}")
+    public void patchComment(@PathVariable("commentId") Long commentId, @RequestBody CommentPatchDto commentPatchDto) throws Exception {
+        commentService.patchComment(commentId, commentPatchDto.getContent());
     }
 }
