@@ -21,7 +21,7 @@ public class CommentController {
 
     @PostMapping(value = "/{videoId}")
     public void createVideoComment(
-            @RequestBody CommentAddDto commentAddDto, @PathVariable("videoId") String videoId) {
+            @RequestBody CommentAddDto commentAddDto, @PathVariable("videoId") String videoId) throws Exception {
         commentService.addComment(videoId, commentAddDto.getContent());
     }
 

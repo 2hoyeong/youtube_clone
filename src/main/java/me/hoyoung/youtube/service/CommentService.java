@@ -24,8 +24,11 @@ public class CommentService {
     private final VideoRepository videoRepository;
 
     @Transactional
-    public void addComment(String videoId, String content) {
+    public void addComment(String videoId, String content) throws Exception {
         Video video = videoRepository.findById(videoId);
+        if (video == null) {
+            throw new NotFoundException("비디오를 찾을 수 없습니다.");
+        }
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Comment comment = Comment.builder()
                 .content(content)
