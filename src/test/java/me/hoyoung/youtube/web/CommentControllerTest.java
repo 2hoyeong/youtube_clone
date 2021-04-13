@@ -94,4 +94,21 @@ public class CommentControllerTest {
         userRepository.deleteAll();
     }
 
+    @Test
+    @DisplayName("댓글 작성 API 테스트")
+    public void createVideoCommentTest() throws Exception {
+        String contents = "댓글 작성 API 테스트 댓글 내용";
+        String videoId = mockVideo.getId();
+
+        CommentAddDto dto = new CommentAddDto(contents);
+
+        mvc.perform(post("/api/v1/comment/" + videoId)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(new ObjectMapper().writeValueAsString(dto))
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
+
+        Comment comment = commentRepository.findAll().get(0);
+        assertThat(comment.getContent()).isEqualTo(contents);
+    }
 }
