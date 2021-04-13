@@ -25,7 +25,7 @@ public class CommentController {
         commentService.addComment(videoId, commentAddDto.getContent());
     }
 
-    @GetMapping(value = "/{videoId}")
+    @GetMapping(value = "/list/{videoId}")
     public ResponseEntity<List<CommentListDao>> getVideoComments(@PathVariable("videoId") String videoId) {
         List<CommentListDao> commentList = commentService.getCommentList(videoId);
         return new ResponseEntity(commentList, HttpStatus.OK);
