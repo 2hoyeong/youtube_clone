@@ -163,4 +163,25 @@ public class CommentRepositoryTest {
         //then
         assertThat(commentRepository.findAllComment(mockVideo).size()).isEqualTo(0);
     }
+
+    @Test
+    @Transactional
+    @DisplayName("댓글 Update를 위한 조회 테스트")
+    public void findCommentForUpdateTest() {
+        //given
+        String content = "댓글 테스트 내용1";
+        commentRepository.save(Comment.builder()
+                .author(mockUser)
+                .video(mockVideo)
+                .createdDate(Timestamp.valueOf(LocalDateTime.now()))
+                .content(content)
+                .build());
+
+        //when
+        Comment mockComment = commentRepository.findAll().get(0);
+        Comment comment = commentRepository.findByAuthorAndCuid(mockUser, mockComment.getCuid());
+
+        //then
+        assertThat(comment.getContent()).isEqualTo(content);
+    }
 }
